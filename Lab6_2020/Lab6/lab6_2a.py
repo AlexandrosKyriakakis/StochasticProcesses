@@ -22,8 +22,10 @@ for delta in [1.0,0.01,20.0]:
     
         point_x.append(x[0])
         point_y.append(x[1])
+    
     plt.subplot()
     plt.scatter(point_x,point_y)
+    plt.title(r'$\delta = {}$'.format(delta))
     plt.show()
     plt.cla()
     plt.clf()
