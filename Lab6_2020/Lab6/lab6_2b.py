@@ -13,7 +13,7 @@ Omega = 2
 Mcmc = []
 Actual = []
 Error = []
-for d in range(2,101):
+for d in range(1,101):
     nhits = 0
     for _ in range(samples):
         x = [0 for i in range(d)]  ## start at the centre of th disc. This variable will keep the position of the chain
@@ -25,20 +25,26 @@ for d in range(2,101):
             x_prop_k = x[k] + z   ## propose a jump by z in the direction k
             R_sqprop = R_sq - x[k]**2+ x_prop_k**2 ## compute the squared distance from 0 after the proposed jump 
             if R_sqprop < 1.0: 
-                nhits += 1
                 R_sq = R_sqprop
                 x[k]= x_prop_k   ## if the proposed jump leads to a point in the disc, then jump
-    result = 2*Omega*(nhits/(N*samples))
+        x_d_next = r.uniform(-delta,delta)
+        R_sq += x_d_next**2
+        if R_sq < 1.0:
+            nhits += 1
+
+    result = 2*Omega*(nhits/(samples))
     Mcmc.append(result)
     Omega = result
-    Actual.append(Vol1(d-2))
-    Error.append(abs(result - Vol1(d-2)))
+    Actual.append(Vol1(d+1))
+    Error.append(abs(result - Vol1(d+1)))
 
 
 plt.subplot()
-plt.plot(Mcmc, color = 'b')
-plt.plot(Actual, color = 'g')
-plt.plot(Error, color = 'r')
+plt.plot(Mcmc, color = 'b', label = 'MCMC')
+plt.plot(Actual, color = 'g', label = 'Actual')
+plt.plot(Error, color = 'r', label = 'Error')
+plt.legend()
+plt.grid()
 plt.show()
 plt.cla()
 plt.clf()
